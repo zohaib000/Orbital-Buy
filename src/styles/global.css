@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Oswald", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+  --color-ink: #14181c;
+  --color-ink-soft: #1c2227;
+  --color-steel: #2b333a;
+  --color-steel-light: #3c4650;
+  --color-paper: #ede7dc;
+  --color-paper-dim: #ddd4c2;
+  --color-rust: #b3491f;
+  --color-rust-bright: #d65a29;
+  --color-safety: #f0b429;
+  --color-chrome: #9aa5ac;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-body);
+  }
+  ::selection {
+    background-color: var(--color-safety);
+    color: var(--color-ink);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+  .diag-top {
+    clip-path: polygon(0 3.5vw, 100% 0, 100% 100%, 0 100%);
+  }
+  .diag-bottom {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3.5vw), 0 100%);
+  }
+  .stencil-shadow {
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+  }
+  .rivet::before,
+  .rivet::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 35% 30%, #cfd6da, #6b747b 70%);
+    top: 8px;
+  }
+  .rivet::before {
+    left: 8px;
+  }
+  .rivet::after {
+    right: 8px;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .marquee-track {
+    animation: marquee linear infinite;
+    width: max-content;
+  }
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,27 @@
+---
+import { product } from "../data/product";
+---
+
+<section class="bg-steel py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <span class="font-mono text-xs uppercase tracking-widest text-rust-bright">Instructions</span>
+    <h2 class="font-display mt-2 mb-12 text-3xl font-semibold uppercase tracking-tight text-paper sm:text-4xl">
+      Four steps, no guesswork
+    </h2>
+
+    <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
+      {
+        product.steps.map((s, i) => (
+          <div class="relative">
+            <div class="font-display text-5xl font-semibold text-steel-light">{s.n}</div>
+            <h3 class="font-display mt-2 text-base font-semibold uppercase tracking-wide text-paper">{s.title}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-chrome">{s.body}</p>
+            {i < product.steps.length - 1 && (
+              <div class="absolute right-[-14px] top-3 hidden text-steel-light sm:block">→</div>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

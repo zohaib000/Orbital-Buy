@@ -1,0 +1,22 @@
+{
+  "name": "topship",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=18.20.8"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.2",
+    "astro": "^5.7.0",
+    "tailwindcss": "^4.3.2"
+  },
+  "overrides": {
+    "vite": "^6.2.6"
+  }
+}

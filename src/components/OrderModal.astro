@@ -1,0 +1,173 @@
+---
+import { product } from "../data/product";
+import { site } from "../data/site";
+---
+
+<dialog
+  id="order-modal"
+  class="m-auto w-[92vw] max-w-md rounded-sm border border-steel-light bg-steel p-0 text-paper backdrop:bg-ink/85 backdrop:backdrop-blur-sm"
+>
+  <div class="relative p-6 sm:p-7">
+    <button
+      type="button"
+      data-close-order
+      aria-label="Close"
+      class="absolute right-4 top-4 font-mono text-xl leading-none text-chrome transition-colors hover:text-safety"
+    >
+      &times;
+    </button>
+
+    <!-- Step 1: details form -->
+    <form id="order-form" data-step="details">
+      <p class="font-mono text-xs uppercase tracking-widest text-rust-bright">Before checkout</p>
+      <h3 class="font-display mt-1 text-xl font-semibold uppercase tracking-wide text-paper">
+        Where should this ship?
+      </h3>
+      <p class="mt-1.5 text-sm text-chrome">
+        We'll save this and carry your email into checkout, so you only type it once.
+      </p>
+
+      <div class="mt-5 space-y-4">
+        <label class="block">
+          <span class="font-mono text-[11px] uppercase tracking-wider text-chrome">Email</span>
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="you@example.com"
+            class="mt-1 w-full rounded-sm border border-steel-light bg-ink px-3 py-2.5 text-sm text-paper outline-none focus:border-safety"
+          />
+        </label>
+        <label class="block">
+          <span class="font-mono text-[11px] uppercase tracking-wider text-chrome">WhatsApp number</span>
+          <input
+            type="tel"
+            name="whatsapp"
+            required
+            placeholder="+1 555 123 4567"
+            class="mt-1 w-full rounded-sm border border-steel-light bg-ink px-3 py-2.5 text-sm text-paper outline-none focus:border-safety"
+          />
+        </label>
+        <label class="block">
+          <span class="font-mono text-[11px] uppercase tracking-wider text-chrome">Delivery address</span>
+          <textarea
+            name="address"
+            required
+            rows="3"
+            placeholder="House / street, area, city"
+            class="mt-1 w-full rounded-sm border border-steel-light bg-ink px-3 py-2.5 text-sm text-paper outline-none focus:border-safety"
+          ></textarea>
+        </label>
+      </div>
+
+      <p id="order-error" class="mt-3 hidden text-xs text-rust-bright"></p>
+
+      <button
+        type="submit"
+        id="order-submit"
+        class="font-display mt-5 w-full rounded-sm bg-safety px-6 py-3 text-base font-semibold uppercase tracking-wide text-ink shadow-[4px_4px_0_0_theme(colors.rust)] transition-transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60"
+      >
+        Proceed to Payment
+      </button>
+    </form>
+
+    <!-- Step 2: confirmation -->
+    <div data-step="success" class="hidden">
+      <p class="font-mono text-xs uppercase tracking-widest text-safety">Order Started</p>
+      <h3 class="font-display mt-1 text-xl font-semibold uppercase tracking-wide text-paper">Almost done!</h3>
+      <p class="mt-2.5 text-sm leading-relaxed text-chrome">
+        We opened the payment page in a new tab — finish checkout there to confirm your order.
+      </p>
+
+      <button
+        type="button"
+        data-close-order
+        class="font-display mt-6 w-full rounded-sm bg-safety px-6 py-3 text-sm font-semibold uppercase tracking-wide text-ink shadow-[4px_4px_0_0_theme(colors.rust)] transition-transform hover:-translate-y-0.5 active:translate-y-0"
+      >
+        Done
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<script
+  define:vars={{
+    gumroadLink: product.gumroadLink,
+    formEndpoint: site.formEndpoint,
+    productName: product.name,
+  }}
+>
+  const modal = document.getElementById("order-modal");
+  const form = document.getElementById("order-form");
+  const submitBtn = document.getElementById("order-submit");
+  const errorEl = document.getElementById("order-error");
+  const detailsStep = modal?.querySelector('[data-step="details"]');
+  const successStep = modal?.querySelector('[data-step="success"]');
+
+  const openModal = () => {
+    if (!(modal instanceof HTMLDialogElement)) return;
+    detailsStep?.classList.remove("hidden");
+    successStep?.classList.add("hidden");
+    errorEl?.classList.add("hidden");
+    if (form instanceof HTMLFormElement) form.reset();
+    modal.showModal();
+  };
+
+  const closeModal = () => {
+    if (modal instanceof HTMLDialogElement) modal.close();
+  };
+
+  // Any element on the page with data-open-order opens this modal.
+  document.querySelectorAll("[data-open-order]").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      openModal();
+    });
+  });
+
+  modal?.querySelectorAll("[data-close-order]").forEach((el) => {
+    el.addEventListener("click", closeModal);
+  });
+
+  // Click on the backdrop closes the dialog.
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!(form instanceof HTMLFormElement) || !(submitBtn instanceof HTMLButtonElement)) return;
+
+    const data = new FormData(form);
+    const email = String(data.get("email") || "").trim();
+    const whatsapp = String(data.get("whatsapp") || "").trim();
+    const address = String(data.get("address") || "").trim();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Saving...";
+
+    try {
+      if (formEndpoint.includes("REPLACE_WITH_YOUR_FORM_ID")) {
+        // Form endpoint not configured yet — skip saving, still let the order proceed.
+        console.warn("OrbitalBuy: set a real Formspree endpoint in src/data/site.ts to save customer data.");
+      } else {
+        await fetch(formEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ product: productName, email, whatsapp, address }),
+        });
+      }
+    } catch (err) {
+      console.error("OrbitalBuy: failed to save customer data", err);
+      // Don't block checkout on a save failure — the sale still matters more.
+    }
+
+    const gumroadUrl = `${gumroadLink}?wanted=true&email=${encodeURIComponent(email)}`;
+    window.open(gumroadUrl, "_blank", "noopener");
+
+    detailsStep?.classList.add("hidden");
+    successStep?.classList.remove("hidden");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Proceed to Payment";
+  });
+</script>

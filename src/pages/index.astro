@@ -1,0 +1,35 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import TrustBar from "../components/TrustBar.astro";
+import VideoDemo from "../components/VideoDemo.astro";
+import Features from "../components/Features.astro";
+import Gallery from "../components/Gallery.astro";
+import Steps from "../components/Steps.astro";
+import Reviews from "../components/Reviews.astro";
+import OrderTicket from "../components/OrderTicket.astro";
+import FAQ from "../components/FAQ.astro";
+import Footer from "../components/Footer.astro";
+import OrderModal from "../components/OrderModal.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+import { product } from "../data/product";
+---
+
+<Layout title={`${product.name} — OrbitalBuy`} description={product.tagline}>
+  <Nav />
+  <main>
+    <Hero />
+    <TrustBar />
+    <VideoDemo />
+    <Features />
+    <Gallery />
+    <Steps />
+    <Reviews />
+    <OrderTicket />
+    <FAQ />
+  </main>
+  <Footer />
+  <OrderModal />
+  <WhatsAppButton />
+</Layout>

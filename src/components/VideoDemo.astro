@@ -1,0 +1,45 @@
+---
+import { product } from "../data/product";
+---
+
+<section id="demo" class="diag-top diag-bottom -my-1 bg-ink py-20 sm:py-28">
+  <div class="mx-auto max-w-4xl px-5 sm:px-8">
+    <div class="mb-10 text-center">
+      <span class="font-mono text-xs uppercase tracking-widest text-safety">Watch It Work</span>
+      <h2 class="font-display mt-2 text-3xl font-semibold uppercase tracking-tight text-paper sm:text-4xl">
+        See the treatment in action
+      </h2>
+    </div>
+
+    <div class="relative overflow-hidden rounded-sm border border-steel-light bg-steel shadow-[0_0_0_1px_rgba(0,0,0,0.4)]">
+      <video
+        id="demo-video"
+        class="aspect-video w-full bg-ink object-cover"
+        src={product.video}
+        controls
+        preload="metadata"
+        playsinline
+        poster={product.images[1]}
+      >
+        Your browser doesn't support embedded video. <a href={product.video} class="text-safety underline">Download the clip</a> instead.
+      </video>
+
+      <div id="demo-video-fallback" class="hidden aspect-video w-full flex-col items-center justify-center gap-3 bg-steel px-6 text-center">
+        <p class="text-sm text-chrome">The demo clip didn't load from its source.</p>
+        <a href={product.video} target="_blank" rel="noopener" class="font-display rounded-sm bg-safety px-5 py-2.5 text-sm font-semibold uppercase tracking-wide text-ink">
+          Open the video directly
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const video = document.getElementById("demo-video");
+  const fallback = document.getElementById("demo-video-fallback");
+  video?.addEventListener("error", () => {
+    video.classList.add("hidden");
+    fallback?.classList.remove("hidden");
+    fallback?.classList.add("flex");
+  });
+</script>

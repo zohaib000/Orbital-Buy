@@ -1,0 +1,118 @@
+---
+import { product } from "../data/product";
+
+// Split images across two rows, alternating, so each row has a mixed set.
+const rowA = product.images.filter((_, i) => i % 2 === 0);
+const rowB = product.images.filter((_, i) => i % 2 === 1);
+---
+
+<section id="gallery" class="overflow-hidden bg-steel py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <span class="font-mono text-xs uppercase tracking-widest text-rust-bright">Product Gallery</span>
+        <h2 class="font-display mt-2 text-3xl font-semibold uppercase tracking-tight text-paper sm:text-4xl">
+          Every angle, before it ships
+        </h2>
+      </div>
+      <p class="font-mono text-xs uppercase tracking-wider text-chrome">Click any photo to zoom in</p>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <div class="marquee-track flex gap-4" style="animation-duration: 34s;">
+      {
+        [...rowA, ...rowA].map((src, i) => (
+          <button
+            type="button"
+            class="gallery-img group relative aspect-[4/5] w-[46vw] shrink-0 cursor-zoom-in overflow-hidden rounded-sm border border-steel-light bg-ink sm:w-[220px]"
+            data-full={src}
+          >
+            <img
+              src={src}
+              alt={`${product.name} — view`}
+              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+            />
+            <span class="pointer-events-none absolute inset-0 flex items-center justify-center bg-ink/0 opacity-0 transition-all duration-200 group-hover:bg-ink/30 group-hover:opacity-100">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f0b429" stroke-width="2">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+                <path d="M11 8v6M8 11h6" />
+              </svg>
+            </span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="marquee-track flex gap-4" style="animation-duration: 30s; animation-direction: reverse;">
+      {
+        [...rowB, ...rowB].map((src, i) => (
+          <button
+            type="button"
+            class="gallery-img group relative aspect-[4/5] w-[46vw] shrink-0 cursor-zoom-in overflow-hidden rounded-sm border border-steel-light bg-ink sm:w-[220px]"
+            data-full={src}
+          >
+            <img
+              src={src}
+              alt={`${product.name} — view`}
+              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+            />
+            <span class="pointer-events-none absolute inset-0 flex items-center justify-center bg-ink/0 opacity-0 transition-all duration-200 group-hover:bg-ink/30 group-hover:opacity-100">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f0b429" stroke-width="2">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+                <path d="M11 8v6M8 11h6" />
+              </svg>
+            </span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<dialog
+  id="gallery-lightbox"
+  class="m-auto max-h-[92vh] max-w-[94vw] rounded-sm border-none bg-transparent p-0 backdrop:bg-ink/90 backdrop:backdrop-blur-sm"
+>
+  <div class="relative">
+    <button
+      type="button"
+      data-close-lightbox
+      aria-label="Close"
+      class="absolute -top-11 right-0 font-mono text-3xl leading-none text-paper transition-colors hover:text-safety"
+    >
+      &times;
+    </button>
+    <img id="lightbox-img" src="" alt="" class="max-h-[85vh] w-auto max-w-[94vw] rounded-sm border border-steel-light object-contain" />
+  </div>
+</dialog>
+
+<script>
+  const lightbox = document.getElementById("gallery-lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  document.querySelectorAll(".gallery-img").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const src = btn.getAttribute("data-full");
+      if (src && lightboxImg instanceof HTMLImageElement) {
+        lightboxImg.src = src;
+      }
+      if (lightbox instanceof HTMLDialogElement) lightbox.showModal();
+    });
+  });
+
+  lightbox?.querySelectorAll("[data-close-lightbox]").forEach((el) => {
+    el.addEventListener("click", () => {
+      if (lightbox instanceof HTMLDialogElement) lightbox.close();
+    });
+  });
+
+  lightbox?.addEventListener("click", (e) => {
+    if (e.target === lightbox && lightbox instanceof HTMLDialogElement) lightbox.close();
+  });
+</script>

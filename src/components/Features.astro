@@ -1,0 +1,44 @@
+---
+import { product } from "../data/product";
+---
+
+<section id="features" class="bg-ink py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="mb-12 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <span class="font-mono text-xs uppercase tracking-widest text-rust-bright">Spec Sheet</span>
+        <h2 class="font-display mt-2 text-3xl font-semibold uppercase tracking-tight text-paper sm:text-4xl">
+          What's in the can
+        </h2>
+      </div>
+      <dl class="flex gap-6 font-mono text-xs uppercase tracking-wider text-chrome">
+        <div>
+          <dt class="text-chrome/70">Capacity</dt>
+          <dd class="text-paper">{product.capacity}</dd>
+        </div>
+        <div>
+          <dt class="text-chrome/70">Scent</dt>
+          <dd class="text-paper">{product.scent}</dd>
+        </div>
+        <div>
+          <dt class="text-chrome/70">Actives</dt>
+          <dd class="text-paper">{product.ingredients.join(" / ")}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="grid grid-cols-1 gap-px bg-steel-light/40 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        product.features.map((f) => (
+          <div class="group relative bg-ink px-6 py-7 transition-colors hover:bg-steel">
+            <span class="font-mono text-3xl font-semibold text-steel-light transition-colors group-hover:text-rust-bright">
+              {f.code}
+            </span>
+            <h3 class="font-display mt-3 text-lg font-semibold uppercase tracking-wide text-paper">{f.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-chrome">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
