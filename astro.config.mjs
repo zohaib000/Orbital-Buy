@@ -6,9 +6,6 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()],
-    server: {
-      allowedHosts: ['unshowering-thalia-tailless.ngrok-free.dev']
-    }
+    plugins: [tailwindcss()]
   }
 });
