@@ -17,7 +17,7 @@ export const product = {
     "https://www.aliexpress.com/item/1005010234777760.html",
   // Replace with your real Gumroad product link once it's published, e.g.
   // https://yourname.gumroad.com/l/your-product-slug
-  gumroadLink: "https://REPLACE.gumroad.com/l/REPLACE",
+  gumroadLink: "https://zhorizon7.gumroad.com/l/yvhkio",
   currency: "$",
   price: 24.99,
   compareAtPrice: 49.99,
@@ -44,17 +44,16 @@ export const product = {
     { code: "I", label: "Style I", image: "/images/petbag/I.avif" },
   ],
 
-  // Kept for components that expect a flat image list (gallery, order ticket thumbnail, etc.)
+  // Higher-res detail/lifestyle photos — used by the gallery and order ticket
+  // thumbnail. Color swatches above are kept separate for the color picker.
   images: [
-    "/images/petbag/A.avif",
-    "/images/petbag/B.avif",
-    "/images/petbag/C.avif",
-    "/images/petbag/D.avif",
-    "/images/petbag/E.avif",
-    "/images/petbag/F.avif",
-    "/images/petbag/G.avif",
-    "/images/petbag/H.avif",
-    "/images/petbag/I.avif",
+    "/images/petbag/detail-1.avif",
+    "/images/petbag/detail-2.avif",
+    "/images/petbag/detail-3.avif",
+    "/images/petbag/detail-4.avif",
+    "/images/petbag/detail-5.avif",
+    "/images/petbag/detail-6.avif",
+    "/images/petbag/detail-7.avif",
   ],
 
   video: "/video/petbag-demo.mp4",
